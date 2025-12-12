@@ -20,6 +20,7 @@ ZImage 是一个包含两个子项目的图像处理和生成平台，提供了 
 
 ```
 ├── zimage/            # React/TypeScript Web 应用
+├── macOS/             # macOS 桌面应用（SwiftUI）
 └── zimagepython/      # Python 桌面应用
 ```
 
@@ -36,6 +37,12 @@ ZImage 是一个包含两个子项目的图像处理和生成平台，提供了 
 - 支持响应式设计，可在各种设备上使用
 - 简单直观的用户界面，包含历史记录功能
 - 支持下载生成的图像
+
+### macOS 应用 (macOS/)
+- 使用 SwiftUI 构建的原生 macOS 应用
+- 提供一键打包脚本，生成 DMG 安装包（`package.sh`）
+- 支持自定义应用图标，自动生成多尺寸图标（`generate_icon.py`）
+- 命令行打包使用 `xcodebuild`，无需手动打开 Xcode
 
 ### Python 桌面应用 (zimagepython/)
 - 基于 PySide6 的桌面应用程序
@@ -71,6 +78,43 @@ ZImage 是一个包含两个子项目的图像处理和生成平台，提供了 
    ```
 
 5. 在浏览器中访问应用程序（默认地址：http://localhost:5173）
+
+### macOS 应用 (macOS/)
+
+**Prerequisites: Xcode 与命令行工具（xcodebuild、swift）、Python 3**
+
+#### 在 Xcode 中运行
+1. 进入 macOS 项目目录：
+   ```bash
+   cd macOS
+   ```
+2. 打开工程并运行：
+   ```bash
+   open z-image.xcodeproj
+   ```
+3. 在 Xcode 顶部选择 Scheme `z-image`，目标选 `My Mac`，点击运行。
+
+#### 命令行构建（Release）
+```bash
+cd macOS
+xcodebuild -scheme z-image -configuration Release -derivedDataPath build
+```
+
+#### 一键打包为 DMG 安装包
+```bash
+cd macOS
+bash package.sh
+```
+- 打包完成后安装包输出：`macOS/dist/Z-Image-Installer.dmg`
+- 若存在 `macOS/icon.png`，脚本会自动生成多尺寸应用图标并设置 DMG 文件图标。
+- 如需代码签名与公证，请在 Xcode 的 Signing & Capabilities 中配置 Team 与证书。
+
+#### 可选：单独生成应用图标
+```bash
+cd macOS
+python3 generate_icon.py icon.png
+```
+该脚本会在 `macOS/z-image/Assets.xcassets/AppIcon.appiconset/` 下生成各尺寸图标并写入 `Contents.json`。
 
 ### Python 桌面应用 (zimagepython/)
 
